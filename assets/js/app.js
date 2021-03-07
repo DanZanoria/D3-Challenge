@@ -56,8 +56,7 @@ povertydata.forEach(function(zdata) {
 // Create a  scale function
 
 var xLinearScale = d3.scaleLinear()
-.domain([20, d3.max(povertydata, z=> z.poverty) * .5
-]) 
+.domain([22, d3.max(povertydata, z=> z.poverty) * .05 ]) 
 .range([0, width]);
 console.log(xLinearScale)
 
@@ -79,7 +78,7 @@ var leftAxis = d3.axisLeft(yLinearScale);
       .call(leftAxis);
 
   // Step 5: Create Circles
-    var circlesGroup = chartGroup.selectAll("circle")
+    var circlesGroup = chartGroup.selectAll("null")
     .data(povertydata)
     .enter()
     .append("circle")
@@ -87,12 +86,16 @@ var leftAxis = d3.axisLeft(yLinearScale);
     .attr("cy", z => yLinearScale(z.healthcare))
     .attr("r", "15")
     .attr("fill", "pink")
-    .attr("opacity", ".5");
+    .attr("opacity", "0.75");
 
 // This bottom portion was suggested to look into the code. To put the labels in the chart by the guys in slackbot. If i dont like it i will comment it out.
 // https://stackoverflow.com/questions/55988709/how-can-i-add-labels-inside-the-points-in-a-scatterplot
 
-var circleLabels = chartGroup.selectAll(null).data(povertydata).enter().append("text");
+var circleLabels = chartGroup.selectAll(null)
+  .data(povertydata)
+  .enter()
+  .append("text");
+
 circleLabels
   .attr("x", function(z) {
     return xLinearScale(z.poverty);
@@ -102,14 +105,19 @@ circleLabels
   })
   .text(function(z) {
     return z.abbr;
-  });
+  })
+    // Make the font to 10px
+    .attr("font-size", "10px")
+    // Center the font
+    .attr("text-anchor", "middle")
+  ;
 
 
   // Step 6: Initialize tool tip
   // ==============================
     var toolTip = d3.tip()
       .attr("class", "tooltip")
-      .offset([100, -70])
+      .offset([80, -60])
       .html(function(z) {
         return (`${z.state}<br> Poverty Rate: ${z.poverty}<br>Healthcare: ${z.healthcare}`);
       });
@@ -127,6 +135,7 @@ circleLabels
       .on("mouseout", function(data, index) {
         toolTip.hide(data);
       });
+  
      // Create axes labels
      chartGroup.append("text")
      .attr("transform", "rotate(-90)")
