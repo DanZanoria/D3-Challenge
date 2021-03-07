@@ -74,9 +74,7 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis) {
 // // This is important for the homework
 // function used for updating circles group with new tooltip
 function updateToolTip(chosenXAxis, circlesGroup) {
-
-  var label;
-
+    
   if (chosenXAxis === "poverty") {
     label = "In Poverty:";
   }
@@ -226,6 +224,9 @@ d3.csv("assets/data/data.csv")
 //         console.log(chosenXAxis)
 
 // functions here found above csv import
+
+
+
 // updates x scale for new data
         xLinearScale = xScale(data, chosenXAxis);
 
@@ -243,7 +244,7 @@ d3.csv("assets/data/data.csv")
           PovertyRateLabel
             .classed("active", true)
             .classed("inactive", false);
-          A
+          AgeLabel
             .classed("active", false)
             .classed("inactive", true);
           IncomeLabel
