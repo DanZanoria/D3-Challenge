@@ -25,8 +25,8 @@ var height = svgHeight - margin.top - margin.bottom;
 var svg = d3
   .select("#scatter")
   .append("svg")
-  .attr("width", width)
-  .attr("height", height)
+  .attr("width", svgWidth)
+  .attr("height", svgHeight)
   .attr("class", "chart");
 console.log(svg)
 
@@ -54,57 +54,57 @@ function xScale(data, chosenXAxis) {
 function renderAxes(newXScale, xAxis) {
   var bottomAxis = d3.axisBottom(newXScale);
 
-//   xAxis.transition()
-//     .duration(1000)
-//     .call(bottomAxis);
+  xAxis.transition()
+    .duration(1000)
+    .call(bottomAxis);
 
   return xAxis;
 }
 
-// // function used for updating circles group with a transition to
-// // new circles
-// function renderCircles(circlesGroup, newXScale, chosenXAxis) {
+// function used for updating circles group with a transition to
+// new circles
+function renderCircles(circlesGroup, newXScale, chosenXAxis) {
 
-//   circlesGroup.transition()
-//     .duration(1000)
-//     .attr("cx", d => newXScale(d[chosenXAxis]));
+  circlesGroup.transition()
+    .duration(1000)
+    .attr("cx", d => newXScale(d[chosenXAxis]));
 
-//   return circlesGroup;
-// }
-// This is important for the homework
+  return circlesGroup;
+}
+// // This is important for the homework
 // function used for updating circles group with new tooltip
-// function updateToolTip(chosenXAxis, circlesGroup) {
+function updateToolTip(chosenXAxis, circlesGroup) {
 
-//   var label;
+  var label;
 
-//   if (chosenXAxis === "poverty") {
-//     label = "In Poverty:";
-//   }
-//   else if  (chosenXAxis === "age") {
-//     label = "Age (Median)";}
-//   else {
-//       label = "House Hold Income (Median):";
-//   }
+  if (chosenXAxis === "poverty") {
+    label = "In Poverty:";
+  }
+  else if  (chosenXAxis === "age") {
+    label = "Age (Median)";}
+  else {
+      label = "House Hold Income (Median):";
+  }
 
-//   var toolTip = d3.tip()
-//     .attr("class", "tooltip")
-//     .offset([80, -60])
-//     .html(function(z) {
-//       return (`${z.state}<br>${label} ${z[chosenXAxis]}`);
-//     });
+  var toolTip = d3.tip()
+    .attr("class", "tooltip")
+    .offset([80, -60])
+    .html(function(z) {
+      return (`${z.state}<br>${label} ${z[chosenXAxis]}`);
+    });
 
-//   circlesGroup.call(toolTip);
+  circlesGroup.call(toolTip);
 
-//   circlesGroup.on("mouseover", function(data) {
-//     toolTip.show(data);
-//   })
-//     // on mouseout event
-//     .on("mouseout", function(data, index) {
-//       toolTip.hide(data);
-//     });
+  circlesGroup.on("mouseover", function(data) {
+    toolTip.show(data);
+  })
+    // on mouseout event
+    .on("mouseout", function(data, index) {
+      toolTip.hide(data);
+    });
 
-//   return circlesGroup;
-// }
+  return circlesGroup;
+}
 
 // // Retrieve data from the CSV file and execute everything below
 d3.csv("assets/data/data.csv")
@@ -175,34 +175,37 @@ d3.csv("assets/data/data.csv")
 
   var IncomeLabel = labelsGroup.append("text")
     .attr("x", 0)
-    .attr("y", 40)
+    .attr("y", 60)
     .attr("value", "obesity") // value to grab for event listener
     .classed("inactive", true)
     .text("House Income (Median) ");
 
 //  append multiple y axis
-  chartGroup.append("text")
+  var Healthlabel = chartGroup.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", 0 - margin.left)
+    .attr("y", 0 - margin.left + 60)
     .attr("x", 0 - (height / 2))
     .attr("dy", "1em")
     .classed("axis-text", true)
+    .classed("active", true)
     .text("Percentage That Lacks Healthcare");
   
-    chartGroup.append("text")
+  var Smokelabel = chartGroup.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", 0 - margin.left)
+    .attr("y", 0 - margin.left + 40)
     .attr("x", 0 - (height / 2))
     .attr("dy", "1em")
     .classed("axis-text", true)
+    .classed("inactive", true)
     .text("Percentage of Smokers");
 
-    chartGroup.append("text")
+  var ObesityLabel = chartGroup.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", 0 - margin.left)
+    .attr("y", 0 - margin.left + 20)
     .attr("x", 0 - (height / 2))
     .attr("dy", "1em")
     .classed("axis-text", true)
+    .classed("inactive", true)
     .text("Obesity Percentage");
 
   // Going to take a break here. Recommment thte code so I know where I left off
@@ -240,10 +243,19 @@ d3.csv("assets/data/data.csv")
           PovertyRateLabel
             .classed("active", true)
             .classed("inactive", false);
-          hairLengthLabel
+          A
             .classed("active", false)
             .classed("inactive", true);
           IncomeLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          Healthlabel
+            .classed("active", true)
+            .classed("inactive", false);
+          Smokelabel
+            .classed("active", false)
+            .classed("inactive", true);
+          ObesityLabel
             .classed("active", false)
             .classed("inactive", true);
         }
@@ -257,20 +269,42 @@ d3.csv("assets/data/data.csv")
           IncomeLabel
             .classed("active", false)
             .classed("inactive", true);
-        }
-        else {
-          AgeLabel
+          Healthlabel
             .classed("active", false)
             .classed("inactive", true);
+          Smokelabel
+            .classed("active", true)
+            .classed("inactive", false);
+          ObesityLabel
+            .classed("active", false)
+            .classed("inactive", true);
+        }
+        else {
           IncomeLabel
             .classed("active", true)
             .classed("inactive", false);
+          AgeLabel
+            .classed("active", false)
+            .classed("inactive", true);
           PovertyRateLabel
             .classed("active", false)
             .classed("inactive", true);
+          Healthlabel
+            .classed("active", false)
+            .classed("inactive", false);
+          Smokelabel
+            .classed("active", false)
+            .classed("inactive", true);
+          ObesityLabel
+            .classed("active", true)
+            .classed("inactive", false);
         }
       }
-      }
-)}).catch(function(error) {
+      })
+  
+
+
+
+}).catch(function(error) {
   console.log(error)
 });
