@@ -8,12 +8,12 @@
 
 // Create the canvas
 var svgWidth = 960;
-var svgHeight = 500;
+var svgHeight = 600;
 
 var margin = {
   top: 20,
-  right: 40,
-  bottom: 80,
+  right: 50,
+  bottom: 100,
   left: 100
 };
 
@@ -23,10 +23,12 @@ var height = svgHeight - margin.top - margin.bottom;
 // Create an SVG wrapper, append an SVG group that will hold our chart,
 // and shift the latter by left and top margins.
 var svg = d3
-  .select(".chart")
-  .append("#scatter")
-  .attr("width", svgWidth)
-  .attr("height", svgHeight);
+  .select("#scatter")
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .attr("class", "chart");
+console.log(svg)
 
 // Append an SVG group
 var chartGroup = svg.append("g")
@@ -68,50 +70,51 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis) {
     .attr("cx", d => newXScale(d[chosenXAxis]));
 
   return circlesGroup;
-// }
+}
 // This is important for the homework
 // function used for updating circles group with new tooltip
-function updateToolTip(chosenXAxis, circlesGroup) {
+// function updateToolTip(chosenXAxis, circlesGroup) {
 
-  var label;
+//   var label;
 
-  if (chosenXAxis === "poverty") {
-    label = "In Poverty:";
-  }
-  else if  (chosenXAxis === "age") {
-    label = "Age (Median)";}
-  else {
-      label = "House Hold Income (Median):";
-  }
+//   if (chosenXAxis === "poverty") {
+//     label = "In Poverty:";
+//   }
+//   else if  (chosenXAxis === "age") {
+//     label = "Age (Median)";}
+//   else {
+//       label = "House Hold Income (Median):";
+//   }
 
-  var toolTip = d3.tip()
-    .attr("class", "tooltip")
-    .offset([80, -60])
-    .html(function(z) {
-      return (`${z.state}<br>${label} ${z[chosenXAxis]}`);
-    });
+//   var toolTip = d3.tip()
+//     .attr("class", "tooltip")
+//     .offset([80, -60])
+//     .html(function(z) {
+//       return (`${z.state}<br>${label} ${z[chosenXAxis]}`);
+//     });
 
-  circlesGroup.call(toolTip);
+//   circlesGroup.call(toolTip);
 
-  circlesGroup.on("mouseover", function(data) {
-    toolTip.show(data);
-  })
-    // onmouseout event
-    .on("mouseout", function(data, index) {
-      toolTip.hide(data);
-    });
+//   circlesGroup.on("mouseover", function(data) {
+//     toolTip.show(data);
+//   })
+//     // on mouseout event
+//     .on("mouseout", function(data, index) {
+//       toolTip.hide(data);
+//     });
 
-  return circlesGroup;
-}
+//   return circlesGroup;
+// }
 
 // // Retrieve data from the CSV file and execute everything below
-d3.csv("assets/data/data.csv").then(function(povertyData, err) {
+d3.csv("assets/data/data.csv")
+.then(function(povertyData, err) {
   if (err) throw err;
 
   // parse data
   povertyData.forEach(function(data) {
-    data.poverty = +data.poverty;
-    data.healthcareLow = +data.healthcareLow;
+    data.poverty = +data.poverty
+    data.healthcare = +data.healthcare
     data.age = +data.age
     data.smokes = +data.smokes
     data.income = +data.income
@@ -124,7 +127,7 @@ d3.csv("assets/data/data.csv").then(function(povertyData, err) {
 
   // Create y scale function
   var yLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(povertyData, d => d.healthcareLow)])
+    .domain([0, d3.max(povertyData, d => d.healthcare)])
     .range([height, 0]);
 
   // Create initial axis functions
@@ -147,7 +150,7 @@ d3.csv("assets/data/data.csv").then(function(povertyData, err) {
     .enter()
     .append("circle")
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
-    .attr("cy", d => yLinearScale(d.healthcareLow))
+    .attr("cy", d => yLinearScale(d.healthcare))
     .attr("r", 20)
     .attr("fill", "pink")
     .attr("opacity", ".5");
@@ -270,5 +273,4 @@ d3.csv("assets/data/data.csv").then(function(povertyData, err) {
       }
 )}).catch(function(error) {
   console.log(error)
-}
-)}
+});
