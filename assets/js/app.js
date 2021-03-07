@@ -7,6 +7,8 @@
 // The earlier git push will have more of that unmodified code. But towards the very the code should look different to fit the criteria.
 // If there is only 1 chart that and no clickable that means I couldnt figure out how to make the multiple charts work, and going by the suggestions made by the ones helping me on slackbot
 
+// Most of this code is attributed Class Actity D3 - Day3  Lesson 9
+
 // Create the canvas
 var svgWidth = 960;
 var svgHeight = 600;
@@ -38,23 +40,29 @@ var chartGroup = svg.append("g")
 
 // Import Data
 
-d3.csv("assets/data/data.csv").then(function (povertydata, err) {
-  if (err) throw err;
+d3.csv("assets/data/data.csv").then(function (povertydata) {
+
 
 // Grab the data
 povertydata.forEach(function(zdata) {
-  zdata.poverty = +zdata.poverty
-  zdata.healthcare = +zdata.healthcare
+  zdata.poverty = +zdata.poverty;
+  zdata.healthcare = +zdata.healthcare;
 });
+
+
+// // Initial Params
+// var chosenXAxis = "poverty";
 
 // Create a  scale function
 
 var xLinearScale = d3.scaleLinear()
-.domain([d3.extent(povertydata.length, z => z.poverty)])
-.range(0, d3.extent[0, width])
+.domain([20, d3.max(povertydata, z=> z.poverty) * .5
+]) 
+.range([0, width]);
+console.log(xLinearScale)
 
 var yLinearScale = d3.scaleLinear()
-  .domain([(0, z => z.healthcare)])
+  .domain([0, d3.max(povertydata, z => z.healthcare)])
   .range([height, 0])
 
 
@@ -84,17 +92,17 @@ var leftAxis = d3.axisLeft(yLinearScale);
 // This bottom portion was suggested to look into the code. To put the labels in the chart by the guys in slackbot. If i dont like it i will comment it out.
 // https://stackoverflow.com/questions/55988709/how-can-i-add-labels-inside-the-points-in-a-scatterplot
 
-// var circleLabels = chartGroup.selectAll(null).data(povertydata).enter().append("text");
-// circleLabels
-//   .attr("x", function(z) {
-//     return xLinearScale(z.poverty);
-//   })
-//   .attr("y", function(z) {
-//     return yLinearScale(z.healthcare);
-//   })
-//   .text(function(z) {
-//     return z.abbr;
-//   });
+var circleLabels = chartGroup.selectAll(null).data(povertydata).enter().append("text");
+circleLabels
+  .attr("x", function(z) {
+    return xLinearScale(z.poverty);
+  })
+  .attr("y", function(z) {
+    return yLinearScale(z.healthcare);
+  })
+  .text(function(z) {
+    return z.abbr;
+  });
 
 
   // Step 6: Initialize tool tip
@@ -126,12 +134,12 @@ var leftAxis = d3.axisLeft(yLinearScale);
      .attr("x", 0 - (height / 2))
      .attr("dy", "1em")
      .attr("class", "axisText")
-     .text("Poverty Rate");
+     .text("Amount Of Healthcare");
 
    chartGroup.append("text")
      .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
      .attr("class", "axisText")
-     .text("Amount of people lacking Healthcare");
+     .text("Poverty Rate");
  }).catch(function(error) {
    console.log(error);
 
