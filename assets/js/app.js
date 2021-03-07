@@ -204,53 +204,71 @@ d3.csv("assets/data/data.csv").then(function(povertyData, err) {
 
   // Going to take a break here. Recommment thte code so I know where I left off
   
-// //   // updateToolTip function above csv import
-//   var circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
+//   // updateToolTip function above csv import
+  var circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
 
-// //   // x axis labels event listener
-//   labelsGroup.selectAll("text")
-//     .on("click", function() {
-//       // get value of selection
-//       var value = d3.select(this).attr("value");
-//       if (value !== chosenXAxis) {
+//   // x axis labels event listener
+  labelsGroup.selectAll("text")
+    .on("click", function() {
+      // get value of selection
+      var value = d3.select(this).attr("value");
+      if (value !== chosenXAxis) {
 
-// //         // replaces chosenXAxis with value
-//         chosenXAxis = value;
+//         // replaces chosenXAxis with value
+        chosenXAxis = value;
 
-// //         console.log(chosenXAxis)
+//         console.log(chosenXAxis)
 
-// // functions here found above csv import
-// // updates x scale for new data
-//         xLinearScale = xScale(povertyData, chosenXAxis);
+// functions here found above csv import
+// updates x scale for new data
+        xLinearScale = xScale(povertyData, chosenXAxis);
 
-// //  updates x axis with transition
-//         xAxis = renderAxes(xLinearScale, xAxis);
+//  updates x axis with transition
+        xAxis = renderAxes(xLinearScale, xAxis);
 
-// //  updates circles with new x values
-//         circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
+//  updates circles with new x values
+        circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
 
-// //   updates tooltips with new info
-//         circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
+//   updates tooltips with new info
+        circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
 
-// //         // changes classes to change bold text
-//         if (chosenXAxis === "num_albums") {
-//           albumsLabel
-//             .classed("active", true)
-//             .classed("inactive", false);
-//           hairLengthLabel
-//             .classed("active", false)
-//             .classed("inactive", true);
-//         }
-//         else {
-//           albumsLabel
-//             .classed("active", false)
-//             .classed("inactive", true);
-//           hairLengthLabel
-//             .classed("active", true)
-//             .classed("inactive", false);
-//         }
-//       }
-//     });
-// }).catch(function(error) {
-//   console.log(error);
-// });
+//         // changes classes to change bold text
+        if (chosenXAxis === "poverty") {
+          PovertyRateLabel
+            .classed("active", true)
+            .classed("inactive", false);
+          hairLengthLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          IncomeLabel
+            .classed("active", false)
+            .classed("inactive", true);
+        }
+        else if (chosenXAxis === "age") {
+          PovertyRateLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          AgeLabel
+            .classed("active", true)
+            .classed("inactive", false);
+          IncomeLabel
+            .classed("active", false)
+            .classed("inactive", true);
+        }
+        else {
+          AgeLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          IncomeLabel
+            .classed("active", true)
+            .classed("inactive", false);
+          PovertyRateLabel
+            .classed("active", false)
+            .classed("inactive", true);
+        }
+      }
+      }
+)}).catch(function(error) {
+  console.log(error)
+}
+)}
