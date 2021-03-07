@@ -15,5 +15,5 @@
 #### index.html is connect to app.js
 #### bonus.html is connected app1.js
 
-### The Index will only have [Poverty & Healtchare], but with labels showing their values.
+### The Index will only have [Poverty & Healtchare], but with labels inside the circle values.
 ### The bonus will have the interactive chart but the labels will not be inside the circle.
