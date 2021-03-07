@@ -24,7 +24,7 @@ var height = svgHeight - margin.top - margin.bottom;
 // and shift the latter by left and top margins.
 var svg = d3
   .select(".chart")
-  .append("svg")
+  .append("#scatter")
   .attr("width", svgWidth)
   .attr("height", svgHeight);
 
