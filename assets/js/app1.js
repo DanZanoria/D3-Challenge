@@ -38,11 +38,11 @@ var chartGroup = svg.append("g")
 var chosenXAxis = "poverty";
 
 // function used for updating x-scale var upon click on axis label
-function xScale(povertyData, chosenXAxis) {
+function xScale(data, chosenXAxis) {
   // create scales
   var xLinearScale = d3.scaleLinear()
-    .domain([d3.min(povertyData, d => d[chosenXAxis]) * 0.8,
-      d3.max(povertyData, d => d[chosenXAxis]) * 1.2
+    .domain([d3.min(data, d => d[chosenXAxis]) * 0.8,
+      d3.max(data, d => d[chosenXAxis]) * 1.2
     ])
     .range([0, width]);
 
@@ -54,23 +54,23 @@ function xScale(povertyData, chosenXAxis) {
 function renderAxes(newXScale, xAxis) {
   var bottomAxis = d3.axisBottom(newXScale);
 
-  xAxis.transition()
-    .duration(1000)
-    .call(bottomAxis);
+//   xAxis.transition()
+//     .duration(1000)
+//     .call(bottomAxis);
 
   return xAxis;
 }
 
 // // function used for updating circles group with a transition to
 // // new circles
-function renderCircles(circlesGroup, newXScale, chosenXAxis) {
+// function renderCircles(circlesGroup, newXScale, chosenXAxis) {
 
-  circlesGroup.transition()
-    .duration(1000)
-    .attr("cx", d => newXScale(d[chosenXAxis]));
+//   circlesGroup.transition()
+//     .duration(1000)
+//     .attr("cx", d => newXScale(d[chosenXAxis]));
 
-  return circlesGroup;
-}
+//   return circlesGroup;
+// }
 // This is important for the homework
 // function used for updating circles group with new tooltip
 // function updateToolTip(chosenXAxis, circlesGroup) {
@@ -108,11 +108,11 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis) {
 
 // // Retrieve data from the CSV file and execute everything below
 d3.csv("assets/data/data.csv")
-.then(function(povertyData, err) {
+.then(function(data, err) {
   if (err) throw err;
 
   // parse data
-  povertyData.forEach(function(data) {
+  data.forEach(function(data) {
     data.poverty = +data.poverty
     data.healthcare = +data.healthcare
     data.age = +data.age
@@ -123,11 +123,11 @@ d3.csv("assets/data/data.csv")
   });
 
   // xLinearScale function above csv import
-  var xLinearScale = xScale(povertyData, chosenXAxis);
+  var xLinearScale = xScale(data, chosenXAxis);
 
   // Create y scale function
   var yLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(povertyData, d => d.healthcare)])
+    .domain([0, d3.max(data, d => d.healthcare)])
     .range([height, 0]);
 
   // Create initial axis functions
@@ -146,7 +146,7 @@ d3.csv("assets/data/data.csv")
 
   // append initial circles
   var circlesGroup = chartGroup.selectAll("circle")
-    .data(povertyData)
+    .data(data)
     .enter()
     .append("circle")
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
@@ -224,7 +224,7 @@ d3.csv("assets/data/data.csv")
 
 // functions here found above csv import
 // updates x scale for new data
-        xLinearScale = xScale(povertyData, chosenXAxis);
+        xLinearScale = xScale(data, chosenXAxis);
 
 //  updates x axis with transition
         xAxis = renderAxes(xLinearScale, xAxis);
